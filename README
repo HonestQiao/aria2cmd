@@ -1,0 +1,60 @@
+Aria2CMD
+==========================================================================
+Infomation
+------------
+Description:    a program to control aria2c xml-rpc from terminal
+Author:         lainme <lainme993@gmail.com> 
+Homepage:       https://github.com/lainme/aria2cmd
+License:        GPL V3
+
+Requirement
+------------
+Python version: Not sure. I only tested it with python2.6
+
+Aria2c version: only tested with 1.10.8 and 1.10.9. You'd better use a
+relatively new version
+
+For desktop notification, you also need the libnotify-bin package. In 
+Debian/Ubuntu:
+
+    $sudo apt-get install libnotify-bin
+
+Usage
+------------
+1.  Use aria2c.sh script to start aria2c xml-rpc daemon.
+   
+    The script includes a simple session control and desktop notification
+
+2.  In terminal, run aria2cmd.py to start the main program. Then type help
+    for avalible command.
+    
+    The above is called interactive mode. You can also run the internal 
+    commands in non-interactive mode, for example:
+
+        $./aria2cmd -c "add http://example/test.iso"
+
+Commands
+-----------
+Descript the internal commands.
+
+  * add URI     --  add a URI to download
+  * rm GID      --  remove a download
+  * ls [STATUS] --  list all downloads in a status. Valid status are: 
+                    active, wait and stop. Default is active
+  * stop [GID]  --  stop a download. If no GID is given, stop all
+  * start [GID] --  start a download. If no GID is given, stop all
+
+You can also run arbitrary aria2c xml-rpc command, such as:
+
+    tellStatus("1")
+
+Limitation
+------------
+1.  Xml-rpc address and port is hard-coded, and xml-rpc username/pass is
+    not considered
+
+2.  Session control only contains the URI. It's a temporary work-around,
+    since aria2c don't save the download added by addMetalink() and 
+    addTorrent() to session at the moment.
+
+3.  Other limitations. I am a begginer...
