@@ -10,7 +10,7 @@ class interactive(cmd.Cmd):
     def __init__(self, aria):
         self.aria = aria
         cmd.Cmd.__init__(self)
-        self.intro = "Welcom to aria2cmd interactive mode. Type help for avalible command."
+        self.intro = "Welcom to aria2cmd interactive mode. Type help for available command."
 
     def printlist(self, query):
         row, column = Popen("stty size",shell=True, stdout=PIPE).communicate()[0].split()

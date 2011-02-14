@@ -26,7 +26,7 @@ Usage
     The script includes a simple session control and desktop notification
 
 2.  In terminal, run aria2cmd.py to start the main program. Then type help
-    for avalible command.
+    for available command.
     
     The above is called interactive mode. You can also run the internal 
     commands in non-interactive mode, for example:
