@@ -38,10 +38,16 @@ class aria2ctl:
             result[i]["gid"] = query[i]["gid"]
             result[i]["file"] = os.path.basename(query[i]["files"][0]["path"])
             result[i]["length"] = prettysize(int(query[i]["totalLength"]))
-            result[i]["ratio"] = str(int(float(query[i]["completedLength"])/float(query[i]["totalLength"])*100))+"%"
+            try:
+                result[i]["ratio"] = str(int(float(query[i]["completedLength"])/float(query[i]["totalLength"])*100))+"%"
+            except:
+                result[i]["ratio"] = "0"
             result[i]["down"] = prettysize(int(query[i]["downloadSpeed"]))+"/s"
             result[i]["up"] = prettysize(int(query[i]["uploadSpeed"]))+"/s"
-            result[i]["seed"] = str(round(float(query[i]["uploadLength"])/float(query[i]["totalLength"]), 1))
+            try:
+                result[i]["seed"] = str(round(float(query[i]["uploadLength"])/float(query[i]["totalLength"]), 1))
+            except:
+                result[i]["seed"] = "0"
 
         return result
 
