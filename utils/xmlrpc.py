@@ -1,12 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os
+import os, sys
 try:
     import xmlrpclib
 except:
     import xmlrpc.client as xmlrpclib
 
+def confparser():
+    config = {}
+    fname = os.path.expanduser("~/.aria2/aria2.conf")
+    for line in open(fname):
+        line = line.rstrip()
+        if not line: continue
+        if line.startswith("#"): continue
+        (name, value) = line.split("=")
+        name = name.strip()
+        config[name] = value
+    return config
+ 
 def prettysize(size):
     suffixes = [("B",2**10), ("K",2**20), ("M",2**30), ("G",2**40), ("T",2**50)]
     for suf, lim in suffixes:
@@ -17,7 +29,11 @@ def prettysize(size):
 
 class aria2ctl:
     def __init__(self):
-        self.ctl = xmlrpclib.ServerProxy('http://localhost:6800/rpc').aria2
+        config = confparser()
+        port = config.get("xml-rpc-listen-port", "6800")
+        user = config.get("xml-rpc-user", "")
+        passwd = config.get("xml-rpc-passwd", "")
+        self.ctl = xmlrpclib.ServerProxy("http://%s:%s@localhost:%s/rpc" %(user, passwd, port)).aria2
         self.attr = ["gid","files","totalLength","completedLength","uploadLength","downloadSpeed","uploadSpeed"]
 
     def abstract(self, cmd):
