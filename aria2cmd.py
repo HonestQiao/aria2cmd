@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import argparse, sys, os, cmd
-from subprocess import Popen, PIPE
+import argparse, sys, os, cmd, subprocess
 from pprint import pprint
 from utils import xmlrpc, config
 
@@ -12,8 +11,15 @@ class interactive(cmd.Cmd):
         cmd.Cmd.__init__(self)
         self.intro = "Welcome to aria2cmd interactive mode. Type help for available command."
 
+    def checkserver(self):
+        rtcode = self.aria.abstract("getSessionInfo()")
+        if type(rtcode).__name__ == "tuple":
+            return False
+        else:
+            return True
+
     def printlist(self, query):
-        row, column = Popen("stty size",shell=True, stdout=PIPE).communicate()[0].split()
+        row, column = subprocess.Popen("stty size",shell=True, stdout=subprocess.PIPE).communicate()[0].split()
         width = [4,0,14,10,10,5]
         width[1] = int(column)-width[0]-width[2]-width[3]-width[4]-width[5]-6
         fmt = "%-*s|%-*s|%-*s|%-*s|%-*s|%-*s"
@@ -52,6 +58,7 @@ class interactive(cmd.Cmd):
         stop [GID]      stop a download, or all download if no GID is given
         start [GID]     start a download, or all download if no GID is given
         clear           clear screen
+        server [on|off] turn on/off server. return server status if no argument
 
         You can also run arbitrary aria2c xml-rpc command, such as:
         tellStatus("1")'''
@@ -61,6 +68,16 @@ class interactive(cmd.Cmd):
         if not argv:
             self.helpinfo()
         cmd.Cmd.do_help(self, argv)
+
+    def do_server(self, argv):
+        '''server [on|off]: turn on/off server. return server status if no argument'''
+        if argv == "on":
+            fscript = os.path.join(os.path.dirname(__file__),"aria2c.sh")
+            subprocess.call(["%s" %(fscript)])
+        elif argv == "off":
+            self.aria.abstract("shutdown()")
+        else:
+            print self.checkserver()
 
     def do_clear(self, argv):
         '''clear: clear the screen'''
@@ -130,6 +147,8 @@ def resume(runcmd):
 def main():
     aria = xmlrpc.aria2ctl()
     runcmd = interactive(aria)
+    while not runcmd.checkserver():
+        runcmd.onecmd("server on")
 
     if len(sys.argv) == 1:
         resume(runcmd)

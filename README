@@ -1,5 +1,5 @@
 aria2cmd - a program to control aria2c xml-rpc in terminal
-==========================================================================
+=============================================================================
 Infomation
 ------------
 Author: lainme <lainme993@gmail.com> 
@@ -13,45 +13,54 @@ Python version: Not sure. I only tested it with python2.6
 Aria2c version: only tested with 1.10.8 and 1.10.9. You'd better use a
 relatively new version
 
-For desktop notification, you also need the libnotify-bin package. In 
+For desktop notification, you also need the libnotify-bin package. In
 Debian/Ubuntu:
 
     $sudo apt-get install libnotify-bin
 
 Usage
 ------------
-1.  Use aria2c.sh script to start aria2c xml-rpc daemon.
-   
-    The script includes a simple session control and desktop notification
+In terminal, run aria2cmd.py to start the main program. Then type help for
+available command.
 
-2.  In terminal, run aria2cmd.py to start the main program. Then type help
-    for available command.
-    
-    The above is called interactive mode. You can also run the internal 
-    commands in non-interactive mode, for example:
+The above is called interactive mode. You can also run the internal commands
+in non-interactive mode, for example:
 
-        $./aria2cmd -c "add http://example/test.iso"
+    $./aria2cmd -c "add http://example/test.iso"
+
+Note: the program will startup aria2c xml-rpc automatically
 
 Commands
 ------------
-Descript the internal commands.
+Describe the internal commands.
 
-* add URI         add a URI to download
-* rm GID          remove a download
-* ls [STATUS]     list all downloads in a status. Valid status are: 
-                  active, wait and stop. Default is active
-* stop [GID]      stop a download. If no GID is given, stop all
-* start [GID]     start a download. If no GID is given, stop all
-* clear           clear screen
+* add URI           add a URI to download
+* rm GID            remove a download
+* ls [STATUS]       list all downloads in a status. Valid status are: active,
+                    wait and stop. Default is active
+* stop [GID]        stop a download. If no GID is given, stop all
+* start [GID]       start a download. If no GID is given, stop all
+* clear             clear screen
+*server [on|off]    turn on/off server. return server status if no argument
 
 You can also run arbitrary aria2c xml-rpc command, such as:
 
     tellStatus("1")
 
+Session
+------------
+Describe the session control method.
+
+For normal link, session is controled by aria2c --save-session and
+--input-file
+
+For metalink/bt, the program scans all files in the download directory and add
+all torrents and unfinished metalink files. 
+
 Limitation
 ------------
-1.  Session control only contains the URI. It's a temporary work-around,
-    since aria2c don't save the download added by addMetalink() and 
-    addTorrent() to session at the moment.
+1.  Session control is not efficient. It's a temporary work-around, since
+aria2c don't save the download added by addMetalink() and addTorrent() to
+session at the moment.
 
 2.  Other limitations. I am a begginer...

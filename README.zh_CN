@@ -1,8 +1,7 @@
 aria2cmd - 一个控制aria2c xml-rpc的终端程序
-==========================================================================
+=============================================================================
 信息
 ------------
-描述：一个控制aria2c xml-rpc的终端程序
 作者：lainme <lainme993@gmail.com> 
 网站：https://github.com/lainme/aria2cmd
 协议：GPL V3
@@ -19,35 +18,42 @@ Aria2c版本：仅用1.10.8和1.10.9版本测试过。你最好用新一些的�
 
 用法
 ------------
-1.  使用aria2c.sh脚本来启动aria2c xml-rpc。
-   
-    这个脚本包含简单的会话控制和桌面提醒
-
-2.  在终端运行aria2cmd.py以启动程序，然后输入help查看可用命令。
+在终端运行aria2cmd.py以启动程序，然后输入help查看可用命令。
     
-    上述方式称作交互模式。你也可以在非交互模式下运行那些内部命令，例如：
+上述方式称作交互模式。你也可以在非交互模式下运行那些内部命令，例如：
 
-        $./aria2cmd -c "add http://example/test.iso"
+    $./aria2cmd -c "add http://example/test.iso"
+
+注意：程序将自动启动aria2c xml-rpc
 
 命令
 -----------
 描述内部命令
 
-* add URI       添加一个下载链接
-* rm GID        删除一个下载
-* ls [STATUS]   列出一个状态下所有的下载。正确的状态可以是：active，
-                wait和stop。默认是active
-* stop [GID]    停止一个下载。如果没有给出GID，则停止全部
-* start [GID]   开始一个下载。如果没有给出GID，则开始全部
-* clear         清屏
+* add URI           添加一个下载链接
+* rm GID            删除一个下载
+* ls [STATUS]       列出一个状态下所有的下载。正确的状态可以是：active，
+                    wait和stop。默认是active
+* stop [GID]        停止一个下载。如果没有给出GID，则停止全部
+* start [GID]       开始一个下载。如果没有给出GID，则开始全部
+* clear             清屏
+* server [on|off]   打开/关闭aria2c xml-rpc服务。无参数则返回服务器状态
 
 你也可以运行任意aria2c xml-rpc命令，比如：
 
     tellStatus("1")
 
+会话控制
+------------
+描述会话控制方法。
+
+对于普通链接，会话由aria2c的-save-session和--input-file控制
+
+对于metalink/bt，程序会扫描下载目录的所有文件，然后添加全部种子文件以及所有未完成的metalink文件。
+
 局限
 ------------
-1.  会话控制仅包含下载地址。这是一个临时的处理方法，因为aria2c目前不将
-    addMetalink()和addTorrent()添加的链接保存到session
+1.  会话控制不高效。这是一个临时的处理方法，因为aria2c目前不将
+addMetalink()和addTorrent()添加的链接保存到session
 
 2.  其他。我是菜鸟...
