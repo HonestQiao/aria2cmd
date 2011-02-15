@@ -1,11 +1,11 @@
-Aria2CMD
+aria2cmd - 一个控制aria2c xml-rpc的终端程序
 ==========================================================================
 信息
 ------------
-描述：  一个控制aria2c xml-rpc的终端程序
-作者：  lainme <lainme993@gmail.com> 
-网站：  https://github.com/lainme/aria2cmd
-协议：  GPL V3
+描述：一个控制aria2c xml-rpc的终端程序
+作者：lainme <lainme993@gmail.com> 
+网站：https://github.com/lainme/aria2cmd
+协议：GPL V3
 
 软件需求
 ------------
@@ -33,12 +33,13 @@ Aria2c版本：仅用1.10.8和1.10.9版本测试过。你最好用新一些的�
 -----------
 描述内部命令
 
-  * add URI     --  添加一个下载链接
-  * rm GID      --  删除一个下载
-  * ls [STATUS] --  列出一个状态下所有的下载。正确的状态可以是：active，
-                    wait和stop。默认是active
-  * stop [GID]  --  停止一个下载。如果没有给出GID，则停止全部
-  * start [GID] --  开始一个下载。如果没有给出GID，则开始全部
+* add URI       添加一个下载链接
+* rm GID        删除一个下载
+* ls [STATUS]   列出一个状态下所有的下载。正确的状态可以是：active，
+                wait和stop。默认是active
+* stop [GID]    停止一个下载。如果没有给出GID，则停止全部
+* start [GID]   开始一个下载。如果没有给出GID，则开始全部
+* clear         清屏
 
 你也可以运行任意aria2c xml-rpc命令，比如：
 
