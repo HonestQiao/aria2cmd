@@ -18,6 +18,19 @@ class interactive(cmd.Cmd):
         else:
             return True
 
+    def resume(self):
+        conf = config.aria2load()
+        dpath= os.path.expanduser(conf.get("dir", "~"))
+
+        for fname in os.listdir(dpath):
+            fname = os.path.join(dpath,fname)
+            (name, ext) = os.path.splitext(fname)
+            if ext==".metalink" or ext==".meta4":
+                if os.path.isfile(os.path.join(name,".aria2")):
+                    runcmd.onecmd("add %s" %(fname))
+            elif ext==".torrent":
+                runcmd.onecmd("add %s" %(fname)) 
+
     def printlist(self, query):
         row, column = subprocess.Popen("stty size",shell=True, stdout=subprocess.PIPE).communicate()[0].split()
         width = [4,0,14,10,10,5]
@@ -72,10 +85,15 @@ class interactive(cmd.Cmd):
     def do_server(self, argv):
         '''server [on|off]: turn on/off server. return server status if no argument'''
         if argv == "on":
-            fscript = os.path.join(os.path.dirname(__file__),"aria2c.sh")
-            subprocess.call(["%s" %(fscript)])
+            if not self.checkserver():
+                fscript = os.path.join(os.path.dirname(__file__),"aria2c.sh")
+                subprocess.call(["%s" %(fscript)])
+            while not self.checkserver():
+                pass
+            self.resume()
         elif argv == "off":
-            self.aria.abstract("shutdown()")
+            if self.checkserver():
+                self.aria.abstract("shutdown()")
         else:
             print self.checkserver()
 
@@ -130,19 +148,6 @@ class interactive(cmd.Cmd):
                 print "Fail. %s" %(e)
         else:
             self.ps(result)
-
-def resume(runcmd):
-    conf = config.aria2load()
-    dpath= os.path.expanduser(conf.get("dir", "~"))
-    
-    for fname in os.listdir(dpath):
-        fname = os.path.join(dpath,fname)
-        (name, ext) = os.path.splitext(fname)
-        if ext==".metalink" or ext==".meta4":
-            if os.path.isfile(os.path.join(name,".aria2")):
-                runcmd.onecmd("add %s" %(fname))
-        elif ext==".torrent":
-            runcmd.onecmd("add %s" %(fname)) 
 
 def main():
     aria = xmlrpc.aria2ctl()
