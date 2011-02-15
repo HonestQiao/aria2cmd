@@ -10,7 +10,7 @@ class interactive(cmd.Cmd):
     def __init__(self, aria):
         self.aria = aria
         cmd.Cmd.__init__(self)
-        self.intro = "Welcom to aria2cmd interactive mode. Type help for available command."
+        self.intro = "Welcome to aria2cmd interactive mode. Type help for available command."
 
     def printlist(self, query):
         row, column = Popen("stty size",shell=True, stdout=PIPE).communicate()[0].split()
@@ -44,24 +44,30 @@ class interactive(cmd.Cmd):
     
     def helpinfo(self):
         print '''Command Summary:
-        add URI     --  add a uri to download
-        ls [STATUS] --  list all downloads in one STATUS.
+        
+        add URI         add a uri to download
+        ls [STATUS]     list all downloads in one STATUS.
                         valid status are: active, wait, stop. default is active
-        rm GID      --  remove a download
-        stop [GID]  --  stop a download, or all download if no GID is given
-        start [GID] --  start a download, or all download if no GID is given
+        rm GID          remove a download
+        stop [GID]      stop a download, or all download if no GID is given
+        start [GID]     start a download, or all download if no GID is given
+        clear           clear screen
 
         You can also run arbitrary aria2c xml-rpc command, such as:
         tellStatus("1")'''
 
     def do_help(self, argv):
-        '''help [command]   --  Print help information'''
+        '''help [command]: Print help information'''
         if not argv:
             self.helpinfo()
         cmd.Cmd.do_help(self, argv)
 
+    def do_clear(self, argv):
+        '''clear: clear the screen'''
+        os.system("clear")
+
     def do_add(self, argv):
-        '''add URI  --  add a URI to download'''
+        '''add URI: add a URI to download'''
         if argv:
             rtcode = self.aria.add(argv)
         else:
@@ -69,7 +75,7 @@ class interactive(cmd.Cmd):
         self.ps(rtcode)
 
     def do_ls(self, argv):
-        '''ls [STATUS]  --  list all downloads in one STATUS.valid status are: active, wait, stop. default is active'''
+        '''ls [STATUS]: list all downloads in one STATUS.valid status are: active, wait, stop. default is active'''
         if argv == "wait":
             query = self.aria.tell("wait")
         elif argv == "stop":
@@ -83,7 +89,7 @@ class interactive(cmd.Cmd):
             self.ps(query)
 
     def do_rm(self, argv):
-        '''rm GID   --  remove a download'''
+        '''rm GID: remove a download'''
         if argv:
             try:
                 complete.remove(self.aria, argv)
@@ -95,11 +101,11 @@ class interactive(cmd.Cmd):
         self.ps(rtcode)
         
     def do_stop(self, argv):
-        '''stop [GID]  --  stop a download, or all download if no GID is given'''
+        '''stop [GID]: stop a download, or all download if no GID is given'''
         self.ps(self.aria.stop(argv))
 
     def do_start(self, argv):
-        '''start [GID] --  start a download, or all download if no GID is given'''
+        '''start [GID]: start a download, or all download if no GID is given'''
         self.ps(self.aria.start(argv))
     
     def default(self, argv):
@@ -116,9 +122,13 @@ def main():
     aria = xmlrpc.aria2ctl()
 
     if len(sys.argv) == 1:
-        interactive(aria).cmdloop()
+        try:
+            interactive(aria).cmdloop()
+        except KeyboardInterrupt:
+            print
+            sys.exit(0)
     else:
-        parser = argparse.ArgumentParser(description="Control aria2c xml-rpc in console")
+        parser = argparse.ArgumentParser(description="Control aria2c xml-rpc in terminal")
         parser.add_argument("-c", dest="cmd", nargs="?", help="Run an internal command")
         args = parser.parse_args()
         cmd = args.cmd
