@@ -4,7 +4,7 @@
 import argparse, sys, os, cmd
 from subprocess import Popen, PIPE
 from pprint import pprint
-from utils import xmlrpc, complete
+from utils import xmlrpc, config
 
 class interactive(cmd.Cmd):
     def __init__(self, aria):
@@ -91,10 +91,6 @@ class interactive(cmd.Cmd):
     def do_rm(self, argv):
         '''rm GID: remove a download'''
         if argv:
-            try:
-                complete.remove(self.aria, argv)
-            except:
-                pass
             rtcode = self.aria.remove(argv)
         else:
             rtcode = (False, "No GID given")
@@ -118,12 +114,27 @@ class interactive(cmd.Cmd):
         else:
             self.ps(result)
 
+def resume(runcmd):
+    conf = config.aria2load()
+    dpath= os.path.expanduser(conf.get("dir", "~"))
+    
+    for fname in os.listdir(dpath):
+        fname = os.path.join(dpath,fname)
+        (name, ext) = os.path.splitext(fname)
+        if ext==".metalink" or ext==".meta4":
+            if os.path.isfile(os.path.join(name,".aria2")):
+                runcmd.onecmd("add %s" %(fname))
+        elif ext==".torrent":
+            runcmd.onecmd("add %s" %(fname)) 
+
 def main():
     aria = xmlrpc.aria2ctl()
+    runcmd = interactive(aria)
 
     if len(sys.argv) == 1:
+        resume(runcmd)
         try:
-            interactive(aria).cmdloop()
+            runcmd.cmdloop()
         except KeyboardInterrupt:
             print
             sys.exit(0)
@@ -131,8 +142,7 @@ def main():
         parser = argparse.ArgumentParser(description="a program to control aria2c xml-rpc in terminal")
         parser.add_argument("-c", dest="cmd", nargs="?", help="Run an internal command")
         args = parser.parse_args()
-        cmd = args.cmd
-        interactive(aria).onecmd(cmd)
+        runcmd.onecmd(args.cmd)
 
 if __name__ == '__main__':
     main()

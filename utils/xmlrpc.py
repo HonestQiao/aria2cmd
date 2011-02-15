@@ -1,23 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os, sys
+import os
 try:
     import xmlrpclib
 except:
     import xmlrpc.client as xmlrpclib
-
-def confparser():
-    config = {}
-    fname = os.path.expanduser("~/.aria2/aria2.conf")
-    for line in open(fname):
-        line = line.rstrip()
-        if not line: continue
-        if line.startswith("#"): continue
-        (name, value) = line.split("=")
-        name = name.strip()
-        config[name] = value
-    return config
+import config
  
 def prettysize(size):
     suffixes = [("B",2**10), ("K",2**20), ("M",2**30), ("G",2**40), ("T",2**50)]
@@ -29,10 +18,10 @@ def prettysize(size):
 
 class aria2ctl:
     def __init__(self):
-        config = confparser()
-        port = config.get("xml-rpc-listen-port", "6800")
-        user = config.get("xml-rpc-user", "")
-        passwd = config.get("xml-rpc-passwd", "")
+        conf = config.aria2load()
+        port = conf.get("xml-rpc-listen-port", "6800")
+        user = conf.get("xml-rpc-user", "")
+        passwd = conf.get("xml-rpc-passwd", "")
         self.ctl = xmlrpclib.ServerProxy("http://%s:%s@localhost:%s/rpc" %(user, passwd, port)).aria2
         self.attr = ["gid","files","totalLength","completedLength","uploadLength","downloadSpeed","uploadSpeed"]
 
@@ -68,8 +57,16 @@ class aria2ctl:
         return result
 
     def add(self, uri):
+        if os.path.isfile(uri):
+            if uri.endswith(".metalink") or uri.endswith(".meta4"):
+                string = "self.ctl.addMetalink(xmlrpclib.Binary(open('%s').read()))" %(uri)
+            elif uri.endswith(".torrent"):
+                string = "self.ctl.addTorrent(xmlrpclib.Binary(open('%s').read()))" %(uri)
+        else:
+            string = "self.ctl.addUri(['%s'])" %(uri)
+
         try:
-            self.ctl.addUri([uri])
+            exec(string)
         except Exception as e:
             return (False, e) 
         return True
