@@ -27,9 +27,9 @@ class interactive(cmd.Cmd):
             (name, ext) = os.path.splitext(fname)
             if ext==".metalink" or ext==".meta4":
                 if os.path.isfile(os.path.join(name,".aria2")):
-                    runcmd.onecmd("add %s" %(fname))
+                    self.do_add(fname)
             elif ext==".torrent":
-                runcmd.onecmd("add %s" %(fname)) 
+                self.do_add(fname) 
 
     def printlist(self, query):
         row, column = subprocess.Popen("stty size",shell=True, stdout=subprocess.PIPE).communicate()[0].split()
@@ -156,7 +156,7 @@ def main():
         runcmd.onecmd("server on")
 
     if len(sys.argv) == 1:
-        resume(runcmd)
+        runcmd.resume()
         try:
             runcmd.cmdloop()
         except KeyboardInterrupt:
