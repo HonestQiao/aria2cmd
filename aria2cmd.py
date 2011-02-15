@@ -128,7 +128,7 @@ def main():
             print
             sys.exit(0)
     else:
-        parser = argparse.ArgumentParser(description="Control aria2c xml-rpc in terminal")
+        parser = argparse.ArgumentParser(description="a program to control aria2c xml-rpc in terminal")
         parser.add_argument("-c", dest="cmd", nargs="?", help="Run an internal command")
         args = parser.parse_args()
         cmd = args.cmd
