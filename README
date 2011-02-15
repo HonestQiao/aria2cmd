@@ -50,11 +50,8 @@ You can also run arbitrary aria2c xml-rpc command, such as:
 
 Limitation
 ------------
-1.  Xml-rpc address and port is hard-coded, and xml-rpc username/pass is
-    not considered
-
-2.  Session control only contains the URI. It's a temporary work-around,
+1.  Session control only contains the URI. It's a temporary work-around,
     since aria2c don't save the download added by addMetalink() and 
     addTorrent() to session at the moment.
 
-3.  Other limitations. I am a begginer...
+2.  Other limitations. I am a begginer...
