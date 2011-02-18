@@ -10,7 +10,7 @@ aria2cmd - 一个控制aria2c xml-rpc的终端程序
 ------------
 Python版本：不确定。仅用python2.6测试过
 
-Aria2c版本：仅用1.10.8和1.10.9版本测试过。你最好用新一些的版本。
+Aria2c版本：要正常工作至少需要git版本
 
 如果要使用桌面提醒，你还需要libnotify-bin包。在Debian/Ubuntu中:
 
@@ -42,18 +42,3 @@ Aria2c版本：仅用1.10.8和1.10.9版本测试过。你最好用新一些的�
 你也可以运行任意aria2c xml-rpc命令，比如：
 
     tellStatus("1")
-
-会话控制
-------------
-描述会话控制方法。
-
-对于普通链接，会话由aria2c的-save-session和--input-file控制
-
-对于metalink/bt，程序会扫描下载目录的所有文件，然后添加全部种子文件以及所有未完成的metalink文件。
-
-局限
-------------
-1.  会话控制不高效。这是一个临时的处理方法，因为aria2c目前不将
-addMetalink()和addTorrent()添加的链接保存到session
-
-2.  其他。我是菜鸟...

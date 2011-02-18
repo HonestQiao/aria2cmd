@@ -41,26 +41,8 @@ Describe the internal commands.
 * stop [GID]        stop a download. If no GID is given, stop all
 * start [GID]       start a download. If no GID is given, stop all
 * clear             clear screen
-*server [on|off]    turn on/off server. return server status if no argument
+* server [on|off]    turn on/off server. return server status if no argument
 
 You can also run arbitrary aria2c xml-rpc command, such as:
 
     tellStatus("1")
-
-Session
-------------
-Describe the session control method.
-
-For normal link, session is controled by aria2c --save-session and
---input-file
-
-For metalink/bt, the program scans all files in the download directory and add
-all torrents and unfinished metalink files. 
-
-Limitation
-------------
-1.  Session control is not efficient. It's a temporary work-around, since
-aria2c don't save the download added by addMetalink() and addTorrent() to
-session at the moment.
-
-2.  Other limitations. I am a begginer...

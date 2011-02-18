@@ -28,11 +28,9 @@ class aria2ctl:
     def abstract(self, cmd):
         try:
             string = "self.ctl."+cmd
-            result = eval(string)
+            return eval(string)
         except Exception as e:
             return (False, e)
-
-        return result 
     
     def getlist(self, query):
         num = len(query)

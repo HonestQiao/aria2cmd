@@ -18,19 +18,6 @@ class interactive(cmd.Cmd):
         else:
             return True
 
-    def resume(self):
-        conf = config.aria2load()
-        dpath= os.path.expanduser(conf.get("dir", "~"))
-
-        for fname in os.listdir(dpath):
-            fname = os.path.join(dpath,fname)
-            (name, ext) = os.path.splitext(fname)
-            if ext==".metalink" or ext==".meta4":
-                if os.path.isfile(os.path.join(name,".aria2")):
-                    self.do_add(fname)
-            elif ext==".torrent":
-                self.do_add(fname) 
-
     def printlist(self, query):
         row, column = subprocess.Popen("stty size",shell=True, stdout=subprocess.PIPE).communicate()[0].split()
         width = [4,0,14,10,10,5]
@@ -90,7 +77,6 @@ class interactive(cmd.Cmd):
                 subprocess.call(["%s" %(fscript)])
             while not self.checkserver():
                 pass
-            self.resume()
         elif argv == "off":
             if self.checkserver():
                 self.aria.abstract("shutdown()")
@@ -145,7 +131,7 @@ class interactive(cmd.Cmd):
             try:
                 pprint(result)
             except Exception as e:
-                print "Fail. %s" %(e)
+                self.ps((False, e))
         else:
             self.ps(result)
 
@@ -156,7 +142,6 @@ def main():
         runcmd.onecmd("server on")
 
     if len(sys.argv) == 1:
-        runcmd.resume()
         try:
             runcmd.cmdloop()
         except KeyboardInterrupt:
