@@ -40,7 +40,7 @@ Describe the internal commands.
 * stop [GID]        stop a download. If no GID is given, stop all
 * start [GID]       start a download. If no GID is given, stop all
 * clear             clear screen
-* server [on|off]    turn on/off server. return server status if no argument
+* server [on|off]   turn on/off server. return server status if no argument
 
 You can also run arbitrary aria2c xml-rpc command, such as:
 
