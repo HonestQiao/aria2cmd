@@ -10,7 +10,7 @@ aria2cmd - 一个控制aria2c xml-rpc的终端程序
 ------------
 Python版本：不确定。仅用python2.6测试过
 
-Aria2c版本：要正常工作至少需要git版本
+Aria2c版本：1.11.0及以上
 
 如果要使用桌面提醒，你还需要libnotify-bin包。在Debian/Ubuntu中:
 

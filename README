@@ -10,7 +10,7 @@ Requirement
 ------------
 Python version: Not sure. I only tested it with python2.6
 
-Aria2c version: You need the lastest git version to get it work.
+Aria2c version: 1.11.0 or higher
 
 For desktop notification, you also need the libnotify-bin package. In
 Debian/Ubuntu:

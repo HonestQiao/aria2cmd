@@ -8,4 +8,4 @@ if [ ! -f $fsession ];then
     touch $fsession
 fi
 
-aria2c --on-download-complete="$fnotify" --on-bt-download-complete="$fnotify" --save-session="$fsession" --input-file="$fsession" --enable-xml-rpc -D
+aria2c --on-download-complete="$fnotify" --on-bt-download-complete="$fnotify" --save-session="$fsession" --input-file="$fsession" --enable-rpc -D
